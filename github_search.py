@@ -20,17 +20,21 @@ def query_github_projects(query):
     else:
         return []
 
-def find_best_project_for_need(need):
+
+
+def best_project_online_search(need):
     projects = query_github_projects(need)
     #print(type(projects[12]))
     if not projects:
         return "No projects found for this need."
-    #print(projects[0].keys())
-    best_project = max(projects, key=lambda project: project['stargazers_count'])
-    return best_project
+    projects = sorted(projects, key=lambda project: project['stargazers_count'], reverse=True)
+    projects = [str(i+1)+". "+project['name']+" " for i, project in enumerate(projects)]
+    consolidated_names = projects[0]+projects[1]+projects[2]
+    print(consolidated_names)
+    return {'name':consolidated_names}
 
 if __name__ == "__main__":
-    need = "rag applications"
-    best_project = find_best_project_for_need(need)
-    print(f"The best open source project for '{need}' is: {best_project['html_url']}")
+    need = "Analytics"
+    best_project = best_project_online_search(need)
+    print(f"The best open source project for '{need}' is: {best_project}")
 
